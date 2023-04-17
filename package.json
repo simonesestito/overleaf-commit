@@ -1,0 +1,15 @@
+{
+  "name": "overleaf-commit",
+  "version": "1.0.0",
+  "description": "Download and git commit a project from Overleaf",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simone Sestito",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^19.9.0",
+    "puppeteer-core": "^19.9.0"
+  }
+}
