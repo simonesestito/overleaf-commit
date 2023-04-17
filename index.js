@@ -57,7 +57,7 @@ const waitForFile = async (fileName) => {
 
     // Funzione di callback per fs.watchFile
     const fileChanged = (curr, prev) => {
-      if (curr.size === prev.size) {
+      if (curr.size === prev.size && curr.size > 0) {
         // Il file non è aumentato di dimensione nell'ultimo secondo
         fs.unwatchFile(filePath, fileChanged);
         resolve();
