@@ -45,44 +45,44 @@ const ZIP_PROJECT = process.env.ZIP_PROJECT;
 })().catch(console.error);
 
 /**
- * Funzione per controllare se un file esiste e non aumenta di dimensione nell'ultimo secondo.
+ * Check if a file exists and does not increase in size in the last second.
+ * That may mean that the file is completely downloaded.
  *
- * @param {string} fileName - Nome del file da controllare.
- * @returns {Promise} Una Promise che si risolve quando il file esiste e non aumenta di dimensione nell'ultimo secondo.
+ * @param {string} fileName - File name to check.
+ * @returns {Promise} A Promise that resolves when the file is completely downloaded.
  */
 const waitForFile = async (fileName) => {
   return new Promise((resolve, reject) => {
-    const filePath = __dirname + '/' + fileName; // Aggiungi il percorso del file in base alla tua configurazione
+    const filePath = __dirname + '/' + fileName; // Add current directory path
     let previousSize = 0;
 
-    // Funzione di callback per fs.watchFile
+    // Callback function to be executed when fs.watchFile detects changes
     const fileChanged = (curr, prev) => {
       if (curr.size === prev.size && curr.size > 0) {
-        // Il file non è aumentato di dimensione nell'ultimo secondo
+        // File size is not changing anymore
         fs.unwatchFile(filePath, fileChanged);
         resolve();
       } else {
-        // Il file è aumentato di dimensione nell'ultimo secondo
+        // File size changed, let's wait for another onChange event
         previousSize = curr.size;
       }
     };
 
-    // Controlla se il file esiste
+    // Check if file already exists
     fs.access(filePath, fs.constants.F_OK, (err) => {
       if (err) {
-        // Se il file non esiste, considera la sua dimensione come zero
+        // File does not exist, yet. Consider its size as zero.
         previousSize = 0;
-        // Inizia a osservare il file per i cambiamenti
+        // Start watching the file for changes
         fs.watchFile(filePath, { interval: 1000 }, fileChanged);
       } else {
-        // Se il file esiste, controlla la sua dimensione
+        // If file already exists, consider its current size as previous
         fs.stat(filePath, (err, stats) => {
           if (err) {
             reject(err);
           } else {
-            // Considera la dimensione del file come zero se non esiste
+            // Start watching the file for changes
             previousSize = stats.size;
-            // Inizia a osservare il file per i cambiamenti
             fs.watchFile(filePath, { interval: 1000 }, fileChanged);
           }
         });
