@@ -2,8 +2,8 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 const fs = require('fs');
 
-const OVERLEAF_READ_SHARE_URL = 'https://www.overleaf.com/read/xdjkjrjcqyym';
-const PROJECT_NAME = 'Bachelor Thesis';
+const OVERLEAF_READ_SHARE_URL = process.env.OVERLEAF_READ_SHARE_URL;
+const ZIP_PROJECT = process.env.ZIP_PROJECT;
 
 (async () => {
     const browser = await puppeteer.launch();
@@ -38,7 +38,7 @@ const PROJECT_NAME = 'Bachelor Thesis';
 
     console.log('Downloading project as zip file...');
     await page.click(downloadZipButton);
-    await waitForFile(`${PROJECT_NAME}.zip`);
+    await waitForFile(ZIP_PROJECT);
 
     console.log('All done! Closing browser...');
     await browser.close();

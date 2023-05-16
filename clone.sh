@@ -2,10 +2,12 @@
 set -e
 set -x
 
-# Download project and clone to GitHub
+# TODO: Environment variables to change!
+export OVERLEAF_READ_SHARE_URL='https://www.overleaf.com/read/xdjkjrjcqyym'
+export PROJECT_FOLDER='/home/simone/overleaf-commit/bachelor-thesis'
+export ZIP_PROJECT='Bachelor Thesis.zip' # Must be the same Overleaf project name
 
-PROJECT_FOLDER='/home/simone/overleaf-commit/bachelor-thesis'
-ZIP_PROJECT='Bachelor Thesis.zip'
+# Download project and clone to GitHub
 
 cd "$(dirname "$0")"
 
@@ -20,6 +22,7 @@ cd "$(dirname "$0")"
 node .
 unzip -o "$ZIP_PROJECT" -d "$PROJECT_FOLDER"
 
+# Push to GitHub
 (
     cd "$PROJECT_FOLDER"
     git add .
